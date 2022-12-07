@@ -2,6 +2,7 @@
 layout: post
 title:  "Yes we hack DOJO #19"
 date:   2022-12-07 10:02:59 +0100
+hidden: true
 categories: jekyll update
 ---
 
@@ -10,6 +11,12 @@ So we can't do -- comments and no spaces.
 Hm.
 
 How about comments?
+
+This SQL Injection like many others come in three parts.
+First to escape from the parameter you're in. In this case no problem. just use "3)".
+The second part is to do whatever we would like to do. In this case UNION some more statements together since we can only do one statement.
+Finally we can comment with \/* since that would 
+
 
 We have a comment below which is a hint? It also has a \*/ for us
 
@@ -44,7 +51,7 @@ SELECT username FROM users WHERE ( role = 'USER' AND email LIKE '%@yahoo.com' ) 
 ```json
 [
   {
-    "username": "FLAG{Th1s_is_th3_4dm1n_p4ssw0rd}"
+    "username": "FLAG{XXXXXXXXXXXXXXXXXXXXXXXXXX}"
   },
   {
     "username": "murphygary@gmail.com"
