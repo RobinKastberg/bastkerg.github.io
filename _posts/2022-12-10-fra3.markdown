@@ -1,0 +1,114 @@
+---
+layout: post
+title:  "FRA-knäck 3"
+date:   2022-12-10 10:02:59 +0100
+hidden: true
+categories: jekyll update
+---
+
+I solved [this](https://fra.se/nyheter/nyheter/nyhetsarkiv/news/fraknack3losanalytikertestet.5.3023631f184a985bf6933a.html)
+starting with with
+
+	tshark -r analytikertestet.pcap -T tabs > analysis
+
+Wireshark statistics didn't really help me at all figuring out the questions, so maybe it was more structural.
+Wanted to get the data out in a useful format. 
+Decided to do a directed graph.
+```python
+f = open("analysis").readlines()
+llst = [r.split("\t") for r in f]
+data = [(int(x[2][-2:]), int(x[4][-2:])) for x in llst]
+
+for row in data:
+    print(row[0], row[1])
+```
+Gives me the following data:
+```
+17 14
+20 4
+6 13
+11 17
+21 2
+7 4
+18 17
+2 21
+4 20
+11 12
+6 16
+4 1
+11 1
+18 19
+6 10
+13 16
+21 8
+20 1
+3 12
+13 10
+10 13
+17 19
+3 9
+13 6
+12 5
+14 17
+16 13
+5 9
+12 3
+1 20
+1 7
+16 6
+9 5
+21 11
+11 21
+16 10
+15 21
+17 18
+19 14
+5 3
+1 4
+2 8
+21 15
+2 15
+20 7
+11 16
+10 6
+5 12
+8 15
+3 5
+7 1
+15 2
+4 7
+8 2
+9 3
+19 18
+19 17
+9 12
+12 9
+15 8
+10 16
+14 19
+7 20
+8 21
+```
+
+I entered this on [https://csacademy.com/app/graph_editor/](https://csacademy.com/app/graph_editor/). Which has a useful forcing mode that was very useful.
+
+I got this.
+
+![](/assets/fra_inital.png)
+
+
+Some massaging gave me this. Now we can easily answer the questions:
+
+![](/assets/fra3.png)
+
+1. Vilket IP-nummer har chefen för organisationen? (tex: 10.10.10.2)
+Det verkar ju väldigt sannolikt att 10.10.10.111 är chefen. Den toppade också listan över skickade paket men har bara tagit emot ett meddelande.
+2. Vilket IP-nummer har troligaste ställföreträdaren till chefen?
+	Jag misstänker 10.10.10.121. 
+	Av följande skäl:
+	* 21 är en cellledare. 
+	* Det är den enda som skickat ett meddelande tillbaka till chefen 
+3. Hur många celler består gruppen av?
+Ser ut som fem.  
+4. Vilka två terrorister sammanbor mest troligt? 
+14 och 18
