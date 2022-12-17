@@ -25,7 +25,7 @@ github_username: bastkerg
 repository: bastkerg/bastkerg.github.io
 
 
-show_excerpts: true
+show_excerpts: false
 comments: false
 
 # Build settings

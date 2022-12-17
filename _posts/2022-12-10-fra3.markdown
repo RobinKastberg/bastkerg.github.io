@@ -2,14 +2,26 @@
 layout: post
 title:  "FRA-knäck 3"
 date:   2022-12-10 10:02:59 +0100
-hidden: true
 categories: jekyll update
 ---
 
-I solved [this](https://fra.se/nyheter/nyheter/nyhetsarkiv/news/fraknack3losanalytikertestet.5.3023631f184a985bf6933a.html)
-starting with with
+In this task we get a packet capture file and need to answer the following questions:
+1. What IP-number does the boss have?
+2. What IP-number does the second in command have?
+3. How many cells does terrorist group have?
+4. Which two terrorist most probably live together?
+
+Starting with with
 
 	tshark -r analytikertestet.pcap -T tabs > analysis
+
+```
+    1	  0.000000	10.10.10.117	→	10.10.10.114	TCP	61	10001 → 80 [SYN] Seq=0 Win=8192 Len=7 [TCP segment of a reassembled PDU]
+    2	 60.000000	10.10.10.120	→	10.10.10.104	TCP	61	10002 → 80 [SYN] Seq=0 Win=8192 Len=7 [TCP segment of a reassembled PDU]
+    3	120.000000	10.10.10.106	→	10.10.10.113	TCP	61	10003 → 80 [SYN] Seq=0 Win=8192 Len=7 [TCP segment of a reassembled PDU]
+    4	180.000000	10.10.10.111	→	10.10.10.117	TCP	61	10004 → 80 [SYN] Seq=0 Win=8192 Len=7 [TCP segment of a reassembled PDU]
+....
+```
 
 Wireshark statistics didn't really help me at all figuring out the questions, so maybe it was more structural.
 Wanted to get the data out in a useful format. 
@@ -94,21 +106,9 @@ I entered this on [https://csacademy.com/app/graph_editor/](https://csacademy.co
 
 I got this.
 
-![](/assets/fra_inital.png)
+![](/assets/fra_initial.png)
 
 
 Some massaging gave me this. Now we can easily answer the questions:
 
 ![](/assets/fra3.png)
-
-1. Vilket IP-nummer har chefen för organisationen? (tex: 10.10.10.2)
-Det verkar ju väldigt sannolikt att 10.10.10.111 är chefen. Den toppade också listan över skickade paket men har bara tagit emot ett meddelande.
-2. Vilket IP-nummer har troligaste ställföreträdaren till chefen?
-	Jag misstänker 10.10.10.121. 
-	Av följande skäl:
-	* 21 är en cellledare. 
-	* Det är den enda som skickat ett meddelande tillbaka till chefen 
-3. Hur många celler består gruppen av?
-Ser ut som fem.  
-4. Vilka två terrorister sammanbor mest troligt? 
-14 och 18

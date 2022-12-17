@@ -4,5 +4,4 @@
 
 layout: home
 ---
-## Summary
-hello from index.md
+I do interesting things. Here you can find some of them.

