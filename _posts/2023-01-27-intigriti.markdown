@@ -1,3 +1,9 @@
+---
+layout: post
+title:  "Intigriti spot the vulnerability"
+date:	2023-01-27
+categories: jekyll update
+---
 # Code
 This was a great opportunity for me to get started into node.js. I have been avoiding it like the plague, but it seems like humanity will go down in flames when npm breaks anyway.
 
@@ -51,10 +57,10 @@ app.listen(8000);
 Realizing it reads the secret from the file in header.kid. We do some testing.
 
 Crafting in jwt.io
-![[/assets/Pasted image 20230127100003.png]]
+![](/assets/Pasted image 20230127100003.png)
 
 and doing a test with known file and contents.
-![[/assets/Pasted image 20230127100231.png]]
+![](/assets/Pasted image 20230127100231.png)
 
 
 
